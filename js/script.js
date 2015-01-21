@@ -14,9 +14,8 @@ function loadData() {
     // load streetview
 
     // YOUR CODE GOES HERE!
-    // todo: figure out why value selection is not working
-    var $street = $(".street").val();
-    var $city = $(".city").val();
+    var $street = $("#street").val();
+    var $city = $("#city").val();
 
     var streetviewUrl = '<img class="bgimg" src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location=' +
             $street + ', ' + $city + '">';
