@@ -26,34 +26,37 @@ function loadData() {
 
     $body.append(streetviewUrl);
 
-    $.getJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q="+$city+"&sort=newest&api-key=<insert key here>", function( data ) {
-        var docs = data.response.docs;
-        var articles = [];
+    $.getJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q="+$city+"&sort=newest&api-key=<insert key here>",
+        function( data ) {
+            var docs = data.response.docs;
+            var articles = [];
 
-        $.each(docs, function(index, value){
-            if(value.document_type == 'article') {
-                articles.push('<li class="article"><a href="'+value.web_url+'">'+value.headline.main+'</a><p>' + value.snippet + '</p>');
-            }
-        });
+            $.each(docs, function(index, value){
+                if(value.document_type == 'article') {
+                    articles.push('<li class="article"><a href="'+value.web_url+'">'+value.headline.main+'</a><p>' + value.snippet + '</p>');
+                }
+            });
 
-        $(articles.join( " " )).appendTo( $("#nytimes-articles") );
+            $(articles.join( " " )).appendTo( $("#nytimes-articles") );
 
-        // udacity solution
-        // for(...)
-        //   $nytElem.append(<article list item>);
-    }).error(function(e) {
+            // udacity solution
+            // for(...)
+            //   $nytElem.append(<article list item>);
+        }).error(function(e) {
             $nytHeaderElem.text("New York Times Articles Could Not Be Loaded");
         }
     );
 
-    $.ajax('http://en.wikipedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack', {dataType: "jsonp"
-    }).done(function(response) {
-        console.log(response);
-        var articleTitles = response[1];
-        var articleLinks = response[3];
-        var numberOfArticles = articleLinks.length;
-        for(var i = 0; i < numberOfArticles; i++) {
-            $wikiElem.append('<li><a href="'+articleLinks[i]+'">'+articleTitles[i]+'</a></li>');
+    $.ajax('http://en.wikipedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack', {
+        dataType: "jsonp",
+        success: function(response) {
+            console.log(response);
+            var articleTitles = response[1];
+            var articleLinks = response[3];
+            var numberOfArticles = articleLinks.length;
+            for(var i = 0; i < numberOfArticles; i++) {
+                $wikiElem.append('<li><a href="'+articleLinks[i]+'">'+articleTitles[i]+'</a></li>');
+            }
         }
     });
 
