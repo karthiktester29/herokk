@@ -13,7 +13,6 @@ function loadData() {
 
     // load streetview
 
-    // YOUR CODE GOES HERE!
     var $street = $("#street").val();
     var $city = $("#city").val();
     var address = $street + ', ' + $city;
@@ -26,7 +25,6 @@ function loadData() {
 
     $body.append(streetviewUrl);
 
-    //&fq=news_desk:("Sports") AND glocations:("NEW YORK CITY")
     $.getJSON("http://api.nytimes.com/svc/search/v2/articlesearch.json?q="+$city+"&sort=newest&api-key=<insert key here>", function( data ) {
         var docs = data.response.docs;
         var articles = [];
@@ -43,7 +41,10 @@ function loadData() {
         // udacity solution
         // for(...)
         //   $nytElem.append(<article list item>);
-    });
+    }).error(function() {
+            $nytHeaderElem.text("New York Times Articles Could Not Be Loaded");
+        }
+    );
 
     return false;
 }
