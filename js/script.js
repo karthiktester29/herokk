@@ -33,7 +33,6 @@ function loadData() {
             if(value.document_type == 'article') {
                 articles.push('<li class="article"><a href="'+value.web_url+'">'+value.headline.main+'</a><p>' + value.snippet + '</p>');
             }
-
         });
 
         $(articles.join( " " )).appendTo( $("#nytimes-articles") );
@@ -41,10 +40,25 @@ function loadData() {
         // udacity solution
         // for(...)
         //   $nytElem.append(<article list item>);
-    }).error(function() {
+    }).error(function(e) {
             $nytHeaderElem.text("New York Times Articles Could Not Be Loaded");
         }
     );
+
+    //udacity answer
+    //todo: change the code to try this out
+    //'http://en.wikipedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack'
+
+    $.ajax("http://en.wikipedia.org/w/api.php?action=query&prop=links&format=json&titles="+$city+"&indexpageids&continue=", {dataType: "jsonp"
+    }).done(function(data) {
+        var pageIds = data.query.pageids;
+        var numberOfPages = pageIds.length;
+        for(var i = 0; i < numberOfPages; i++) {
+            var index = pageIds[i];
+            var pageLink = data.query.pages[index].links[0].title;
+            $wikiElem.append('<li><a href="http://en.wikipedia.org/wiki/'+pageLink+'">'+pageLink+'</a></li>');
+        }
+    });
 
     return false;
 }
