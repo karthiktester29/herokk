@@ -47,7 +47,11 @@ function loadData() {
         }
     );
 
-    $.ajax('http://en.wikipedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack', {
+    var wikiRequestTimeout = setTimeout(function(){
+        $wikiElem.text("failed to get wikipedia resources");
+    }, 8000);
+
+    $.ajax('http://en.wikipsdkjflasdjkflskjflsjedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack', {
         dataType: "jsonp",
         success: function(response) {
             console.log(response);
@@ -57,6 +61,8 @@ function loadData() {
             for(var i = 0; i < numberOfArticles; i++) {
                 $wikiElem.append('<li><a href="'+articleLinks[i]+'">'+articleTitles[i]+'</a></li>');
             }
+
+            clearTimeout(wikiRequestTimeout);
         }
     });
 
