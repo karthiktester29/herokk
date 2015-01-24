@@ -42,7 +42,7 @@ function loadData() {
             // udacity solution
             // for(...)
             //   $nytElem.append(<article list item>);
-        }).error(function(e) {
+        }).error(function() {
             $nytHeaderElem.text("New York Times Articles Could Not Be Loaded");
         }
     );
@@ -51,7 +51,7 @@ function loadData() {
         $wikiElem.text("failed to get wikipedia resources");
     }, 8000);
 
-    $.ajax('http://en.wikipsdkjflasdjkflskjflsjedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack', {
+    $.ajax('http://en.wikipedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack', {
         dataType: "jsonp",
         success: function(response) {
             console.log(response);
