@@ -14,11 +14,12 @@ function loadData() {
     // load streetview
 
     var $street = $("#street").val();
-    var $city = $("#city").val();
-    var address = $street + ', ' + $city;
+    var $cityState = $("#cityState").val();
+    var $city = $cityState.split(',')[0];
+    var address = $street + ', ' + $cityState;
 
     $greeting.text('So, you want to live at '+ address +'?');
-    $nytHeaderElem.text("New York Times Articles About "+ $city);
+    $nytHeaderElem.text("New York Times Articles About "+ $cityState);
 
     var streetviewUrl = '<img class="bgimg" src="https://maps.googleapis.com/maps/api/streetview?size=600x400&location=' +
            address + '">';
@@ -45,18 +46,14 @@ function loadData() {
         }
     );
 
-    //udacity answer
-    //todo: change the code to try this out
-    //'http://en.wikipedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack'
-
-    $.ajax("http://en.wikipedia.org/w/api.php?action=query&prop=links&format=json&titles="+$city+"&indexpageids&continue=", {dataType: "jsonp"
-    }).done(function(data) {
-        var pageIds = data.query.pageids;
-        var numberOfPages = pageIds.length;
-        for(var i = 0; i < numberOfPages; i++) {
-            var index = pageIds[i];
-            var pageLink = data.query.pages[index].links[0].title;
-            $wikiElem.append('<li><a href="http://en.wikipedia.org/wiki/'+pageLink+'">'+pageLink+'</a></li>');
+    $.ajax('http://en.wikipedia.org/w/api.php?action=opensearch&search='+$city+'&format=json&callback=wikiCallBack', {dataType: "jsonp"
+    }).done(function(response) {
+        console.log(response);
+        var articleTitles = response[1];
+        var articleLinks = response[3];
+        var numberOfArticles = articleLinks.length;
+        for(var i = 0; i < numberOfArticles; i++) {
+            $wikiElem.append('<li><a href="'+articleLinks[i]+'">'+articleTitles[i]+'</a></li>');
         }
     });
 
